@@ -1,6 +1,5 @@
 export class RestartButton {
   constructor(scene) {
-    console.log(scene, 'construct');
     this.relatedScene = scene;
   }
 
@@ -18,7 +17,7 @@ export class RestartButton {
       this.startButton.setFrame(0);
     });
     this.startButton.on('pointerdown', () => {
-      this.relatedScene.scene.switch('game');
+      this.relatedScene.scene.start('game');
     });
   }
 }
