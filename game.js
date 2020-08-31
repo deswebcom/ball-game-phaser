@@ -11,17 +11,37 @@ export class Game extends Phaser.Scene {
   preload() {
     this.load.image('background', 'images/background.png');
     this.load.image('gameover', 'images/gameover.png');
+    this.load.image('congratulations', 'images/congratulations.png');
     this.load.image('platform', 'images/platform.png');
     this.load.image('ball', 'images/ball.png');
-
+    this.load.image('bluebrick', 'images/brickBlue.png');
+    this.load.image('blackbrick', 'images/brickBlack.png');
+    this.load.image('greenbrick', 'images/brickGreen.png');
+    this.load.image('orangebrick', 'images/brickOrange.png');
   }
 
   create() {
     this.physics.world.setBoundsCollision(true, true, true, false);
 
     this.add.image(410, 250, 'background');
+    
+    this.bricks = this.physics.add.staticGroup({
+      key: ['bluebrick', 'orangebrick', 'greenbrick', 'blackbrick'], 
+      frameQuantity: 10,
+      gridAlign: { 
+        width: 10, 
+        height: 4, 
+        cellWidth: 67, 
+        cellHeight: 34, 
+        x: 112, 
+        y: 100
+      }
+    });
+
     this.gameoverImage = this.add.image(400, 90, 'gameover');
     this.gameoverImage.visible = false;
+    this.congratsImage = this.add.image(400, 90, 'congratulations');
+    this.congratsImage.visible = false;
     
     this.platform = this.physics.add.image(400, 460, 'platform').setImmovable();
     this.platform.body.allowGravity = false;
@@ -35,6 +55,8 @@ export class Game extends Phaser.Scene {
     this.ball.setData('glue', true);
 
     this.physics.add.collider(this.ball, this.platform, this.platformImpact, null, this);
+
+    this.physics.add.collider(this.ball, this.bricks, this.brickImpact, null, this);
 
     this.scoreText = this.add.text(16, 16, 'PUNTOS: 0', { fontSize: '20px', fill: '#fff', fontFamily: 'verdana, arial, sans-serif' });
   }
@@ -63,29 +85,43 @@ export class Game extends Phaser.Scene {
       console.log('fin');
       this.gameoverImage.visible = true;
       this.scene.pause();
+      this.bricks.setVisible(false);
     }
 
     if (this.cursors.up.isDown) {
       if (this.ball.getData('glue')) {
-        this.ball.setVelocity(-75, -300);
+        this.ball.setVelocity(-60, -300);
         this.ball.setData('glue', false);
       }
     }
   }
 
   platformImpact(ball, platform) {
-    this.score++;
-    this.scoreText.setText('PUNTOS: ' + this.score);
+    this.increasePoints(1);
     let relativeImpact = ball.x - platform.x;
     if(relativeImpact > 0) {
       console.log('derecha!');
-      ball.setVelocityX(10 * relativeImpact);
+      ball.setVelocityX(8 * relativeImpact);
     } else if(relativeImpact < 0) {
       console.log('izquierda!');
-      ball.setVelocityX(10 * relativeImpact);
+      ball.setVelocityX(8 * relativeImpact);
     } else {
       console.log('centro!!');
       ball.setVelocityX(Phaser.Math.Between(-10, 10))
     }
+  }
+
+  brickImpact(ball, brick) {
+    brick.disableBody(true, true);
+    this.increasePoints(10);
+    if (this.bricks.countActive() === 0) {
+      this.congratsImage.visible = true;
+      this.scene.pause();
+    }
+  }
+
+  increasePoints(points) {
+    this.score += points;
+    this.scoreText.setText('PUNTOS: ' + this.score);
   }
 }
