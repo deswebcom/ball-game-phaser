@@ -10,8 +10,6 @@ export class Game extends Phaser.Scene {
 
   preload() {
     this.load.image('background', 'images/background.png');
-    this.load.image('gameover', 'images/gameover.png');
-    this.load.image('congratulations', 'images/congratulations.png');
     this.load.image('platform', 'images/platform.png');
     this.load.image('ball', 'images/ball.png');
     this.load.image('bluebrick', 'images/brickBlue.png');
@@ -38,11 +36,6 @@ export class Game extends Phaser.Scene {
       }
     });
 
-    this.gameoverImage = this.add.image(400, 90, 'gameover');
-    this.gameoverImage.visible = false;
-    this.congratsImage = this.add.image(400, 90, 'congratulations');
-    this.congratsImage.visible = false;
-    
     this.platform = this.physics.add.image(400, 460, 'platform').setImmovable();
     this.platform.body.allowGravity = false;
     this.platform.setCollideWorldBounds(true);
@@ -81,11 +74,9 @@ export class Game extends Phaser.Scene {
       }
     }
 
-    if (this.ball.y > 500) {
-      console.log('fin');
-      this.gameoverImage.visible = true;
-      this.scene.pause();
-      this.bricks.setVisible(false);
+    if (this.ball.y > 500 && this.ball.active) {
+      console.log('fin', this.ball.y, this.ball, '--');
+      this.endGame();
     }
 
     if (this.cursors.up.isDown) {
@@ -115,13 +106,21 @@ export class Game extends Phaser.Scene {
     brick.disableBody(true, true);
     this.increasePoints(10);
     if (this.bricks.countActive() === 0) {
-      this.congratsImage.visible = true;
-      this.scene.pause();
+      this.endGame(true);
     }
   }
 
   increasePoints(points) {
     this.score += points;
     this.scoreText.setText('PUNTOS: ' + this.score);
+  }
+
+  endGame(completed = false) {
+    this.scene.pause();
+    if(! completed) {
+      this.scene.start('gameover');
+    } else {
+      this.scene.start('congratulations');
+    }
   }
 }
