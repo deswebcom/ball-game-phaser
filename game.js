@@ -3,6 +3,10 @@ export class Game extends Phaser.Scene {
   constructor() {
     super({ key: 'game' });
   }
+  
+  init() {
+    this.score = 0;
+  }
 
   preload() {
     this.load.image('background', 'images/background.png');
@@ -32,9 +36,10 @@ export class Game extends Phaser.Scene {
       velocity = 0 - velocity;
     }
     this.ball.setVelocity(velocity, 10);
-  
 
-    this.physics.add.collider(this.ball, this.platform);
+    this.physics.add.collider(this.ball, this.platform, this.platformImpact, null, this);
+
+    this.scoreText = this.add.text(16, 16, 'PUNTOS: 0', { fontSize: '20px', fill: '#fff', fontFamily: 'verdana, arial, sans-serif' });
   }
 
   update() {
@@ -55,4 +60,19 @@ export class Game extends Phaser.Scene {
     }
   }
 
+  platformImpact(ball, platform) {
+    this.score++;
+    this.scoreText.setText('PUNTOS: ' + this.score);
+    let relativeImpact = ball.x - platform.x;
+    if(relativeImpact > 0) {
+      console.log('derecha!');
+      ball.setVelocityX(10 * relativeImpact);
+    } else if(relativeImpact < 0) {
+      console.log('izquierda!');
+      ball.setVelocityX(10 * relativeImpact);
+    } else {
+      console.log('centro!!');
+      ball.setVelocityX(Phaser.Math.Between(-10, 10))
+    }
+  }
 }
