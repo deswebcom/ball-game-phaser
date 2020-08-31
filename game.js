@@ -13,6 +13,7 @@ export class Game extends Phaser.Scene {
     this.load.image('gameover', 'images/gameover.png');
     this.load.image('platform', 'images/platform.png');
     this.load.image('ball', 'images/ball.png');
+
   }
 
   create() {
@@ -24,6 +25,7 @@ export class Game extends Phaser.Scene {
     
     this.platform = this.physics.add.image(400, 460, 'platform').setImmovable();
     this.platform.body.allowGravity = false;
+    this.platform.setCollideWorldBounds(true);
     
     this.cursors = this.input.keyboard.createCursorKeys();
     
