@@ -16,6 +16,12 @@ export class Game extends Phaser.Scene {
     this.load.image('blackbrick', 'images/brickBlack.png');
     this.load.image('greenbrick', 'images/brickGreen.png');
     this.load.image('orangebrick', 'images/brickOrange.png');
+
+    this.load.audio('platformimpactsample', 'sounds/platform-impact.ogg');
+    this.load.audio('brickimpactsample', 'sounds/brick-impact.ogg');
+    this.load.audio('gameoversample', 'sounds/gameover.ogg');
+    this.load.audio('winsample', 'sounds/you_win.ogg');
+    this.load.audio('startgamesample', 'sounds/start-game.ogg');
   }
 
   create() {
@@ -52,6 +58,13 @@ export class Game extends Phaser.Scene {
     this.physics.add.collider(this.ball, this.bricks, this.brickImpact, null, this);
 
     this.scoreText = this.add.text(16, 16, 'PUNTOS: 0', { fontSize: '20px', fill: '#fff', fontFamily: 'verdana, arial, sans-serif' });
+
+    this.platformImpactSample = this.sound.add('platformimpactsample');
+    this.brickImpactSample = this.sound.add('brickimpactsample');
+    this.brickImpactSample = this.sound.add('brickimpactsample');
+    this.gameOverSample = this.sound.add('gameoversample');
+    this.winSample = this.sound.add('winsample');
+    this.startGameSample = this.sound.add('startgamesample');
   }
 
   update() {
@@ -77,10 +90,12 @@ export class Game extends Phaser.Scene {
     if (this.ball.y > 500 && this.ball.active) {
       console.log('fin', this.ball.y, this.ball, '--');
       this.endGame();
+      this.gameOverSample.play();
     }
 
     if (this.cursors.up.isDown) {
       if (this.ball.getData('glue')) {
+        this.startGameSample.play();
         this.ball.setVelocity(-60, -300);
         this.ball.setData('glue', false);
       }
@@ -88,6 +103,7 @@ export class Game extends Phaser.Scene {
   }
 
   platformImpact(ball, platform) {
+    this.platformImpactSample.play();
     this.increasePoints(1);
     let relativeImpact = ball.x - platform.x;
     if(relativeImpact > 0) {
@@ -103,10 +119,12 @@ export class Game extends Phaser.Scene {
   }
 
   brickImpact(ball, brick) {
+    this.brickImpactSample.play();
     brick.disableBody(true, true);
     this.increasePoints(10);
     if (this.bricks.countActive() === 0) {
       this.endGame(true);
+      this.winSample.play();
     }
   }
 
