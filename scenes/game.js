@@ -1,3 +1,5 @@
+import { LiveCounter } from '../components/live-counter.js';
+
 export class Game extends Phaser.Scene {
 
   constructor() {
@@ -6,6 +8,7 @@ export class Game extends Phaser.Scene {
   
   init() {
     this.score = 0;
+    this.liveCounter = new LiveCounter(this, 3);
   }
 
   preload() {
@@ -22,12 +25,15 @@ export class Game extends Phaser.Scene {
     this.load.audio('gameoversample', 'sounds/gameover.ogg');
     this.load.audio('winsample', 'sounds/you_win.ogg');
     this.load.audio('startgamesample', 'sounds/start-game.ogg');
+    this.load.audio('livelostsample', 'sounds/live-lost.ogg');
   }
 
   create() {
     this.physics.world.setBoundsCollision(true, true, true, false);
-
+    
     this.add.image(410, 250, 'background');
+    
+    this.liveCounter.create();
     
     this.bricks = this.physics.add.staticGroup({
       key: ['bluebrick', 'orangebrick', 'greenbrick', 'blackbrick'], 
@@ -65,6 +71,7 @@ export class Game extends Phaser.Scene {
     this.gameOverSample = this.sound.add('gameoversample');
     this.winSample = this.sound.add('winsample');
     this.startGameSample = this.sound.add('startgamesample');
+    this.liveLostSample = this.sound.add('livelostsample');
   }
 
   update() {
@@ -88,9 +95,11 @@ export class Game extends Phaser.Scene {
     }
 
     if (this.ball.y > 500 && this.ball.active) {
-      console.log('fin', this.ball.y, this.ball, '--');
-      this.endGame();
-      this.gameOverSample.play();
+      this.liveCounter.liveLost();
+      if(this.liveCounter.isAlive()) {
+        this.setInitialPlatformState();
+      }
+      
     }
 
     if (this.cursors.up.isDown) {
@@ -107,13 +116,10 @@ export class Game extends Phaser.Scene {
     this.increasePoints(1);
     let relativeImpact = ball.x - platform.x;
     if(relativeImpact > 0) {
-      console.log('derecha!');
       ball.setVelocityX(8 * relativeImpact);
     } else if(relativeImpact < 0) {
-      console.log('izquierda!');
       ball.setVelocityX(8 * relativeImpact);
     } else {
-      console.log('centro!!');
       ball.setVelocityX(Phaser.Math.Between(-10, 10))
     }
   }
@@ -140,5 +146,15 @@ export class Game extends Phaser.Scene {
     } else {
       this.scene.start('congratulations');
     }
+  }
+
+  setInitialPlatformState() {
+    this.liveLostSample.play();
+    this.platform.x = 400;
+    this.platform.y = 460;
+    this.ball.setVelocity(0,0);
+    this.ball.x = 385;
+    this.ball.y = 430;
+    this.ball.setData('glue', true);
   }
 }
