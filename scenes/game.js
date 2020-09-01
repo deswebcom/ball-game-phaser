@@ -5,10 +5,10 @@ export class Game extends Phaser.Scene {
 
   constructor() {
     super({ key: 'game' });
-    this.phaseConstructor = new PhaseConstructor(this);
   }
   
   init() {
+    this.phaseConstructor = new PhaseConstructor(this);
     this.score = 0;
     this.liveCounter = new LiveCounter(this, 3);
   }
@@ -21,13 +21,18 @@ export class Game extends Phaser.Scene {
     this.load.image('blackbrick', 'images/brickBlack.png');
     this.load.image('greenbrick', 'images/brickGreen.png');
     this.load.image('orangebrick', 'images/brickOrange.png');
+    this.load.image('yellowbrick', 'images/brickYellow.png');
+    this.load.image('whitebrick', 'images/brickWhite.png');
+    this.load.image('greybrick', 'images/brickGrey.png');
 
     this.load.audio('platformimpactsample', 'sounds/platform-impact.ogg');
     this.load.audio('brickimpactsample', 'sounds/brick-impact.ogg');
+    this.load.audio('fixedbrickimpactsample', 'sounds/fixed-brick-impact.ogg');
     this.load.audio('gameoversample', 'sounds/gameover.ogg');
     this.load.audio('winsample', 'sounds/you_win.ogg');
     this.load.audio('startgamesample', 'sounds/start-game.ogg');
     this.load.audio('livelostsample', 'sounds/live-lost.ogg');
+    this.load.audio('phasechange', 'sounds/phasechange.ogg');
   }
 
   create() {
@@ -35,22 +40,8 @@ export class Game extends Phaser.Scene {
     
     this.add.image(410, 250, 'background');
     
-    this.bricks = this.phaseConstructor.create();
     this.liveCounter.create();
     
-    this.bricks = this.physics.add.staticGroup({
-      key: ['bluebrick', 'orangebrick', 'greenbrick', 'blackbrick'], 
-      frameQuantity: 10,
-      gridAlign: { 
-        width: 10, 
-        height: 4, 
-        cellWidth: 67, 
-        cellHeight: 34, 
-        x: 95, 
-        y: 100
-      }
-    });
-
     this.platform = this.physics.add.image(400, 460, 'platform').setImmovable();
     this.platform.body.allowGravity = false;
     this.platform.setCollideWorldBounds(true);
@@ -61,19 +52,21 @@ export class Game extends Phaser.Scene {
     this.ball.setBounce(1);
     this.ball.setCollideWorldBounds(true);
     this.ball.setData('glue', true);
-
+    
     this.physics.add.collider(this.ball, this.platform, this.platformImpact, null, this);
-
-    this.physics.add.collider(this.ball, this.bricks, this.brickImpact, null, this);
-
+    
+    this.phaseConstructor.create();
+    
     this.scoreText = this.add.text(16, 16, 'PUNTOS: 0', { fontSize: '20px', fill: '#fff', fontFamily: 'verdana, arial, sans-serif' });
 
     this.platformImpactSample = this.sound.add('platformimpactsample');
     this.brickImpactSample = this.sound.add('brickimpactsample');
+    this.fixedBrickImpactSample = this.sound.add('fixedbrickimpactsample');
     this.gameOverSample = this.sound.add('gameoversample');
     this.winSample = this.sound.add('winsample');
     this.startGameSample = this.sound.add('startgamesample');
     this.liveLostSample = this.sound.add('livelostsample');
+    this.phaseChangeSample = this.sound.add('phasechange');
   }
 
   update() {
@@ -99,6 +92,7 @@ export class Game extends Phaser.Scene {
     if (this.ball.y > 500 && this.ball.active) {
       let gameNotFinished = this.liveCounter.liveLost();
       if (!gameNotFinished) {
+        this.liveLostSample.play();
         this.setInitialPlatformState();
       }
     }
@@ -129,10 +123,15 @@ export class Game extends Phaser.Scene {
     this.brickImpactSample.play();
     brick.disableBody(true, true);
     this.increasePoints(10);
-    if (this.bricks.countActive() === 0) {
+    if (this.phaseConstructor.isPhaseFinished()) {
+      this.phaseChangeSample.play();
       this.phaseConstructor.nextLevel();
-      //this.
+      this.setInitialPlatformState();
     }
+  }
+
+  fixedBrickImpact(ball, brick) {
+    this.fixedBrickImpactSample.play();
   }
 
   increasePoints(points) {
@@ -151,7 +150,7 @@ export class Game extends Phaser.Scene {
   }
 
   setInitialPlatformState() {
-    this.liveLostSample.play();
+    
     this.platform.x = 400;
     this.platform.y = 460;
     this.ball.setVelocity(0,0);
