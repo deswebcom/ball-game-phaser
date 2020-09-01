@@ -43,7 +43,7 @@ export class Game extends Phaser.Scene {
         height: 4, 
         cellWidth: 67, 
         cellHeight: 34, 
-        x: 112, 
+        x: 95, 
         y: 100
       }
     });
