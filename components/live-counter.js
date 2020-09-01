@@ -1,32 +1,34 @@
 export class LiveCounter {
   constructor(scene, initialLives) {
     this.relatedScene = scene;
-    this.lives = initialLives;
-    this.liveDisplayers = [];
+    this.initialLives = initialLives;
   }
 
   create() {
     let displacement = 60;
-    let firstPosition = 820 - ((this.lives - 1) * displacement);
-    for (let i = this.lives; i > 1 ; i--) {
-      let horizontalPosition = ((i - 2) * displacement) + firstPosition;
-      let currenDisplay = this.relatedScene.physics.add.image(horizontalPosition, 15, 'platform').setScale(0.5);
-      this.liveDisplayers.push(currenDisplay);
-    }
+    let firstPosition = 800 - ((this.initialLives - 1) * displacement);
+    this.liveImages = this.relatedScene.physics.add.staticGroup({
+      setScale: { x: 0.5, y: 0.5 },
+      key: 'platform',
+      frameQuantity: this.initialLives-1,
+      gridAlign: {
+        width: this.initialLives - 1,
+        height: 1,
+        cellWidth: displacement,
+        cellHeight: 30,
+        x: firstPosition,
+        y: 30
+      }
+    });
   }
 
   liveLost() {
-    this.lives--;
-    if(this.lives == 0) {
-      this.relatedScene.gameOverSample.play();
+    if (this.liveImages.countActive() == 0) {
       this.relatedScene.endGame();
-    } else {
-      let currentLiveLost = this.liveDisplayers.pop();
-      currentLiveLost.visible = false;
+      return true;
     }
-  }
-
-  isAlive() {
-    return (this.lives > 0) ? true : false;
+    let currentLiveLost = this.liveImages.getFirstAlive();
+    currentLiveLost.disableBody(true, true);
+    return false;
   }
 }
