@@ -87,7 +87,6 @@ export class Game extends Phaser.Scene {
     }
 
     if (this.ball.y > 500 && this.ball.active) {
-      console.log('fin', this.ball.y, this.ball, '--');
       this.endGame();
       this.gameOverSample.play();
     }
