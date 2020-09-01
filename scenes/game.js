@@ -1,7 +1,10 @@
+import { PhaseConstructor } from '../components/phase-constructor.js';
+
 export class Game extends Phaser.Scene {
 
   constructor() {
     super({ key: 'game' });
+    this.phaseConstructor = new PhaseConstructor(this);
   }
   
   init() {
@@ -29,18 +32,7 @@ export class Game extends Phaser.Scene {
 
     this.add.image(410, 250, 'background');
     
-    this.bricks = this.physics.add.staticGroup({
-      key: ['bluebrick', 'orangebrick', 'greenbrick', 'blackbrick'], 
-      frameQuantity: 10,
-      gridAlign: { 
-        width: 10, 
-        height: 4, 
-        cellWidth: 67, 
-        cellHeight: 34, 
-        x: 112, 
-        y: 100
-      }
-    });
+    this.bricks = this.phaseConstructor.create();
 
     this.platform = this.physics.add.image(400, 460, 'platform').setImmovable();
     this.platform.body.allowGravity = false;
@@ -88,7 +80,6 @@ export class Game extends Phaser.Scene {
 
     if (this.ball.y > 500 && this.ball.active) {
       this.endGame();
-      this.gameOverSample.play();
     }
 
     if (this.cursors.up.isDown) {
@@ -121,8 +112,8 @@ export class Game extends Phaser.Scene {
     brick.disableBody(true, true);
     this.increasePoints(10);
     if (this.bricks.countActive() === 0) {
-      this.endGame(true);
-      this.winSample.play();
+      this.phaseConstructor.nextLevel();
+      this.
     }
   }
 
@@ -134,8 +125,10 @@ export class Game extends Phaser.Scene {
   endGame(completed = false) {
     this.scene.pause();
     if(! completed) {
+      this.gameOverSample.play();
       this.scene.start('gameover');
     } else {
+      this.winSample.play();
       this.scene.start('congratulations');
     }
   }
