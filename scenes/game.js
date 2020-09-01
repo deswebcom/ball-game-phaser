@@ -8,7 +8,7 @@ export class Game extends Phaser.Scene {
   
   init() {
     this.score = 0;
-    this.liveCounter = new LiveCounter(this, 5);
+    this.liveCounter = new LiveCounter(this, 3);
   }
 
   preload() {
@@ -94,11 +94,10 @@ export class Game extends Phaser.Scene {
     }
 
     if (this.ball.y > 500 && this.ball.active) {
-      this.liveCounter.liveLost();
-      if(this.liveCounter.isAlive()) {
+      let gameNotFinished = this.liveCounter.liveLost();
+      if (!gameNotFinished) {
         this.setInitialPlatformState();
       }
-      
     }
 
     if (this.cursors.up.isDown) {
@@ -139,8 +138,8 @@ export class Game extends Phaser.Scene {
   }
 
   endGame(completed = false) {
-    this.scene.pause();
     if(! completed) {
+      this.gameOverSample.play();
       this.scene.start('gameover');
     } else {
       this.scene.start('congratulations');
