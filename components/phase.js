@@ -12,9 +12,11 @@ export class Phase {
   }
 
   deleteFixedBricks() {
-    this.fixedBricks.getChildren().forEach(item => {
-      item.disableBody(true, true);
-    })
+    if(this.fixedBricks) {
+      this.fixedBricks.getChildren().forEach(item => {
+        item.disableBody(true, true);
+      })
+    }
   }
 
   isPhaseFinished() {
