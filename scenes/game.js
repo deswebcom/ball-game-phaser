@@ -61,7 +61,6 @@ export class Game extends Phaser.Scene {
 
     this.platformImpactSample = this.sound.add('platformimpactsample');
     this.brickImpactSample = this.sound.add('brickimpactsample');
-    this.brickImpactSample = this.sound.add('brickimpactsample');
     this.gameOverSample = this.sound.add('gameoversample');
     this.winSample = this.sound.add('winsample');
     this.startGameSample = this.sound.add('startgamesample');
