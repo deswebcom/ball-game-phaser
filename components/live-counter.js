@@ -40,6 +40,5 @@ export class LiveCounter {
     })
     let newLive = this.liveImages.create(targetPos, 26, 'platform');
     newLive.setScale(0.5);
-
   }
 }

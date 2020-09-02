@@ -156,7 +156,7 @@ export class Game extends Phaser.Scene {
     });
   }
 
-  increaseLives(num) {
-    this.liveCounter.increase(num);
+  increaseLives() {
+    this.liveCounter.increase();
   }
 }

@@ -6,6 +6,6 @@ export class LivePower extends Power {
   }
 
   givePower() {
-    this.relatedScene.increaseLives(1);
+    this.relatedScene.increaseLives();
   }
 }
