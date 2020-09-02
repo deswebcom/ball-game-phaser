@@ -1,4 +1,7 @@
 import { Phase } from './phase.js'
+import { Diamonds } from "./diamonds.js";
+import { LivePower } from './powers/live-power.js';
+import { LargePlatformPower } from './powers/large-platform-power.js';
 
 export class Phase5 extends Phase {
 
@@ -32,6 +35,11 @@ export class Phase5 extends Phase {
     this.configureColisions();
     this.configureColisionsFixed();
 
+    this.diamonds = new Diamonds(this.relatedScene);
+    this.setBrickCollider(this.diamonds.diamonds);
+
+    this.powers[1] = new LivePower(this.relatedScene, this.diamonds);
+    this.powers[3] = new LargePlatformPower(this.relatedScene, this.diamonds);
 
   }
 }

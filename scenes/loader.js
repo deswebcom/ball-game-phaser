@@ -14,7 +14,7 @@ export class Loader extends Phaser.Scene {
 
     // Game
     this.load.image('background', 'images/background.png');
-    this.load.image('platform', 'images/platform.png');
+    this.load.image('platform', 'images/platform2.png');
     this.load.image('ball', 'images/ball.png');
     this.load.image('bluebrick', 'images/brickBlue.png');
     this.load.image('blackbrick', 'images/brickBlack.png');
@@ -32,7 +32,11 @@ export class Loader extends Phaser.Scene {
       'images/red_diamond-sprites.png',
       { frameWidth: 48, frameHeight: 48 }
     );
-    
+    this.load.spritesheet('greendiamond',
+      'images/green_diamond-sprites.png',
+      { frameWidth: 48, frameHeight: 48 }
+    );
+
     this.load.audio('platformimpactsample', 'sounds/platform-impact.ogg');
     this.load.audio('brickimpactsample', 'sounds/brick-impact.ogg');
     this.load.audio('fixedbrickimpactsample', 'sounds/fixed-brick-impact.ogg');

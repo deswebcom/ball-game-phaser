@@ -1,4 +1,8 @@
 import { Phase } from './phase.js'
+import { Diamonds } from "./diamonds.js";
+import { LivePower } from './powers/live-power.js';
+import { LargePlatformPower } from './powers/large-platform-power.js';
+import { GluePower } from './powers/glue-power.js';
 
 export class Phase6 extends Phase {
 
@@ -26,6 +30,16 @@ export class Phase6 extends Phase {
     });
 
     this.configureColisions();
+
+    this.diamonds = new Diamonds(this.relatedScene);
+    this.setBrickCollider(this.diamonds.diamonds);
+
+    this.powers[3] = new LivePower(this.relatedScene, this.diamonds);
+    this.powers[14] = new LargePlatformPower(this.relatedScene, this.diamonds);
+    this.powers[21] = new GluePower(this.relatedScene, this.diamonds);
+    this.powers[4] = new LivePower(this.relatedScene, this.diamonds);
+    this.powers[15] = new LargePlatformPower(this.relatedScene, this.diamonds);
+    this.powers[22] = new GluePower(this.relatedScene, this.diamonds);
 
   }
 }
