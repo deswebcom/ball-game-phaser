@@ -1,6 +1,7 @@
 import { PhaseConstructor } from '../components/phases/phase-constructor.js';
 import { LiveCounter } from '../components/live-counter.js';
 import { Platform } from '../components/platform.js';
+import { Ball } from '../components/ball.js';
 
 const INITIAL_LIVES = 3;
 const INITIAL_VELOCITY_X = -60;
@@ -15,6 +16,7 @@ export class Game extends Phaser.Scene {
     this.glueRecordVelocityX = INITIAL_VELOCITY_X; 
     this.phaseConstructor = new PhaseConstructor(this);
     this.platform = new Platform(this);
+    this.ball = new Ball(this);
     this.liveCounter = new LiveCounter(this, INITIAL_LIVES);
     this.score = 0;
   }
@@ -27,13 +29,9 @@ export class Game extends Phaser.Scene {
     this.liveCounter.create();
     
     this.platform.create();
-
-    this.ball = this.physics.add.image(385, 430, 'ball');
-    this.ball.setBounce(1);
-    this.ball.setCollideWorldBounds(true);
-    this.ball.setData('glue', true);
+    this.ball.create();
     
-    this.physics.add.collider(this.ball, this.platform.platform, this.platformImpact, null, this);
+    this.physics.add.collider(this.ball.ball, this.platform.get(), this.platformImpact, null, this);
     
     this.phaseConstructor.create();
 
@@ -56,7 +54,7 @@ export class Game extends Phaser.Scene {
   update() {
     this.platform.updatePosition(this.ball, this.cursors);
 
-    if (this.ball.y > 500 && this.ball.active) {
+    if (this.ball.isLost()) {
       let gameNotFinished = this.liveCounter.liveLost();
       if (!gameNotFinished) {
         this.liveLostSample.play();
@@ -68,12 +66,11 @@ export class Game extends Phaser.Scene {
     }
 
     if (this.cursors.up.isDown) {
-      if (this.ball.getData('glue')) {
+      if (this.ball.isGlued) {
         this.startGameSample.play();
-        this.ball.setVelocity(INITIAL_VELOCITY_X, -300);
-        this.ball.setData('glue', false);
-      } else if (this.platform.hasGluePower() && this.platform.hasBallGlued) {
-        this.ball.setVelocity(this.glueRecordVelocityX, -300);
+        this.ball.throw(INITIAL_VELOCITY_X);
+      } else if(this.platform.isGluedBecausePower()) {
+        this.ball.throw(this.glueRecordVelocityX);
         this.platform.hasBallGlued = false;
       }
     }
@@ -84,16 +81,19 @@ export class Game extends Phaser.Scene {
     this.increasePoints(1);
     let relativeImpact = ball.x - platform.x;
     if(this.platform.hasGluePower()) {
-      this.ball.setVelocityY(0);
-      this.ball.setVelocityX(0);
+      ball.setVelocityY(0);
+      ball.setVelocityX(0);
       this.glueRecordVelocityX = this.calculateVelocity(relativeImpact);
       this.platform.hasBallGlued = true;
     } else {
-        ball.setVelocityX(this.calculateVelocity(relativeImpact));
+      ball.setVelocityX(this.calculateVelocity(relativeImpact));
     }
   }
 
   calculateVelocity(relativeImpact) {
+    if(relativeImpact > 50) {
+      relativeImpact = 50;
+    }
     if (relativeImpact > 0) {
       return (8 * relativeImpact);
     } else if (relativeImpact < 0) {

@@ -4,7 +4,8 @@ export const LARGE_PLATFORM_SIZE = 1;
 export class Platform {
   constructor(scene) {
     this.relatedScene = scene;
-    this.size = INITIAL_PLATFORM_SIZE;
+    //this.size = INITIAL_PLATFORM_SIZE;
+    this.size = 1;
     this.gluePower = false;
     this.hasBallGlued = false;
   }
@@ -22,20 +23,20 @@ export class Platform {
   updatePosition(ball, cursors) {
     if (cursors.left.isDown) {
       this.platform.setVelocityX(-500);
-      if (ball.getData('glue') || this.hasBallGlued) {
-        ball.setVelocityX(-500);
+      if (ball.isGlued || this.hasBallGlued) {
+        ball.get().setVelocityX(-500);
       }
     }
     else if (cursors.right.isDown) {
       this.platform.setVelocityX(500);
-      if (ball.getData('glue') || this.hasBallGlued) {
-        ball.setVelocityX(500);
+      if (ball.isGlued || this.hasBallGlued) {
+        ball.get().setVelocityX(500);
       }
     }
     else {
       this.platform.setVelocityX(0);
-      if (ball.getData('glue') || this.hasBallGlued) {
-        ball.setVelocityX(0);
+      if (ball.isGlued || this.hasBallGlued) {
+        ball.get().setVelocityX(0);
       }
     }
   }
@@ -43,14 +44,14 @@ export class Platform {
   setInitialState(ball) {
     this.platform.x = 400;
     this.platform.y = 460;
-    ball.setVelocity(0, 0);
-    ball.x = 385;
+    ball.get().setVelocity(0, 0);
+    ball.get().x = 385;
     if (this.size == LARGE_PLATFORM_SIZE) {
-      ball.y = 420;
+      ball.get().y = 420;
     } else {
-      ball.y = 430;
+      ball.get().y = 430;
     }
-    ball.setData('glue', true);
+    ball.isGlued = true;
   }
 
   setSize(size) {
@@ -72,6 +73,14 @@ export class Platform {
   setGluePower() {
     this.setInitialSize();
     this.gluePower = true;
+  }
+
+  get() {
+    return this.platform;
+  }
+
+  isGluedBecausePower() {
+    return (this.hasGluePower() && this.hasBallGlued)
   }
 }
 
