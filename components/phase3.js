@@ -1,4 +1,5 @@
 import { Phase } from './phase.js'
+import { LivePower } from './powers/live-power.js';
 
 export class Phase3 extends Phase {
 
@@ -18,6 +19,10 @@ export class Phase3 extends Phase {
     this.bricks.create(440, 90, 'greenbrick');
 
     this.configureColisions();
+    
+    this.powers[3] = new LivePower(this.relatedScene);
+    this.powers[4] = new LivePower(this.relatedScene);;
+    this.powers[5] = new LivePower(this.relatedScene);;
 
   }
 }

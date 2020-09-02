@@ -23,7 +23,12 @@ export class Loader extends Phaser.Scene {
     this.load.image('yellowbrick', 'images/brickYellow.png');
     this.load.image('whitebrick', 'images/brickWhite.png');
     this.load.image('greybrick', 'images/brickGrey.png');
-
+    
+    //this.load.image('bluediamond', 'images/blue_diamond.png');
+    this.load.spritesheet('bluediamondsprites',
+      'images/blue_diamond-sprites.png',
+      { frameWidth: 48, frameHeight: 48 }
+    );
     
     this.load.audio('platformimpactsample', 'sounds/platform-impact.ogg');
     this.load.audio('brickimpactsample', 'sounds/brick-impact.ogg');

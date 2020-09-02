@@ -17,7 +17,7 @@ export class Game extends Phaser.Scene {
     this.physics.world.setBoundsCollision(true, true, true, false);
     
     this.add.image(410, 250, 'background');
-    
+
     this.liveCounter.create();
     
     this.platform = this.physics.add.image(400, 460, 'platform').setImmovable();
@@ -34,7 +34,7 @@ export class Game extends Phaser.Scene {
     this.physics.add.collider(this.ball, this.platform, this.platformImpact, null, this);
     
     this.phaseConstructor.create();
-    
+
     this.scoreText = this.add.text(16, 16, 'PUNTOS: 0', { fontSize: '20px', fill: '#fff', fontFamily: 'verdana, arial, sans-serif' });
 
     this.platformImpactSample = this.sound.add('platformimpactsample');
@@ -45,6 +45,8 @@ export class Game extends Phaser.Scene {
     this.startGameSample = this.sound.add('startgamesample');
     this.liveLostSample = this.sound.add('livelostsample');
     this.phaseChangeSample = this.sound.add('phasechange');
+
+    this.createAnimations();
   }
 
   update() {
@@ -135,5 +137,19 @@ export class Game extends Phaser.Scene {
     this.ball.x = 385;
     this.ball.y = 430;
     this.ball.setData('glue', true);
+  }
+
+  setBrickCollider(element) {
+    this.phaseConstructor.setBrickCollider(element);
+  }
+
+  createAnimations() {
+    this.anims.create({
+      key: 'bluediamondanimation',
+      frames: this.anims.generateFrameNumbers('bluediamondsprites', { start: 0, end: 7 }),
+      frameRate: 10,
+      repeat: -1,
+      yoyo: true,
+    });
   }
 }

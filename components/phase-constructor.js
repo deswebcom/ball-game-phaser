@@ -12,9 +12,9 @@ export class PhaseConstructor {
       Phase6,
       Phase5,
       Phase4,
-      Phase3,
       Phase2,
       Phase1,
+      Phase3,
     ];
   }
 
@@ -35,5 +35,9 @@ export class PhaseConstructor {
 
   isPhaseFinished() {
     return this.currentPhase.isPhaseFinished();
+  }
+
+  setBrickCollider(element) {
+    this.currentPhase.setBrickCollider(element)
   }
 }
