@@ -1,4 +1,4 @@
-import { PhaseConstructor } from '../components/phase-constructor.js';
+import { PhaseConstructor } from '../components/phases/phase-constructor.js';
 import { LiveCounter } from '../components/live-counter.js';
 
 const INITIAL_PLATFORM_SIZE = 0.6;

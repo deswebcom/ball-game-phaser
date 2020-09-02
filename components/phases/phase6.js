@@ -1,8 +1,8 @@
 import { Phase } from './phase.js'
-import { Diamonds } from "./diamonds.js";
-import { LivePower } from './powers/live-power.js';
-import { LargePlatformPower } from './powers/large-platform-power.js';
-import { GluePower } from './powers/glue-power.js';
+import { Diamonds } from "../diamonds.js";
+import { LivePower } from '../powers/live-power.js';
+import { LargePlatformPower } from '../powers/large-platform-power.js';
+import { GluePower } from '../powers/glue-power.js';
 
 export class Phase6 extends Phase {
 
