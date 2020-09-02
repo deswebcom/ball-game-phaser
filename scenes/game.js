@@ -1,24 +1,22 @@
 import { PhaseConstructor } from '../components/phases/phase-constructor.js';
 import { LiveCounter } from '../components/live-counter.js';
+import { Platform } from '../components/platform.js';
 
-const INITIAL_PLATFORM_SIZE = 0.6;
-const LARGE_PLATFORM_SIZE = 1;
+const INITIAL_LIVES = 3;
 const INITIAL_VELOCITY_X = -60;
 
 export class Game extends Phaser.Scene {
-
+  
   constructor() {
     super({ key: 'game' });
   }
   
   init() {
-    this.phaseConstructor = new PhaseConstructor(this);
-    this.score = 0;
-    this.liveCounter = new LiveCounter(this, 4);
-    this.platformSize = INITIAL_PLATFORM_SIZE;
-    this.gluePower = false;
     this.glueRecordVelocityX = INITIAL_VELOCITY_X; 
-    this.isGlued = false;
+    this.phaseConstructor = new PhaseConstructor(this);
+    this.platform = new Platform(this);
+    this.liveCounter = new LiveCounter(this, INITIAL_LIVES);
+    this.score = 0;
   }
 
   create() {
@@ -28,18 +26,14 @@ export class Game extends Phaser.Scene {
 
     this.liveCounter.create();
     
-    this.platform = this.physics.add.image(400, 460, 'platform').setImmovable().setScale(this.platformSize);
-    this.platform.body.allowGravity = false;
-    this.platform.setCollideWorldBounds(true);
-    
-    this.cursors = this.input.keyboard.createCursorKeys();
-    
+    this.platform.create();
+
     this.ball = this.physics.add.image(385, 430, 'ball');
     this.ball.setBounce(1);
     this.ball.setCollideWorldBounds(true);
     this.ball.setData('glue', true);
     
-    this.physics.add.collider(this.ball, this.platform, this.platformImpact, null, this);
+    this.physics.add.collider(this.ball, this.platform.platform, this.platformImpact, null, this);
     
     this.phaseConstructor.create();
 
@@ -55,35 +49,20 @@ export class Game extends Phaser.Scene {
     this.phaseChangeSample = this.sound.add('phasechange');
 
     this.createAnimations();
+
+    this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   update() {
-    if (this.cursors.left.isDown) {
-      this.platform.setVelocityX(-500);
-      if (this.ball.getData('glue') || this.isGlued) {
-        this.ball.setVelocityX(-500);
-      }
-    }
-    else if (this.cursors.right.isDown) {
-      this.platform.setVelocityX(500);
-      if (this.ball.getData('glue') || this.isGlued) {
-        this.ball.setVelocityX(500);
-      }
-    }
-    else {
-      this.platform.setVelocityX(0);
-      if (this.ball.getData('glue') || this.isGlued) {
-        this.ball.setVelocityX(0);
-      }
-    }
+    this.platform.updatePosition(this.ball, this.cursors);
 
     if (this.ball.y > 500 && this.ball.active) {
       let gameNotFinished = this.liveCounter.liveLost();
       if (!gameNotFinished) {
         this.liveLostSample.play();
-        this.setInitialPlatformState();
-        this.setPlatformInitial();
-        this.gluePower = false;
+        this.platform.setInitialState(this.ball);
+        this.platform.setInitialSize();
+        this.platform.removeGlue();
         this.glueRecordVelocityX = INITIAL_VELOCITY_X;
       }
     }
@@ -93,9 +72,9 @@ export class Game extends Phaser.Scene {
         this.startGameSample.play();
         this.ball.setVelocity(INITIAL_VELOCITY_X, -300);
         this.ball.setData('glue', false);
-      } else if(this.gluePower && this.isGlued) {
-        this.isGlued = false;
+      } else if (this.platform.hasGluePower() && this.platform.hasBallGlued) {
         this.ball.setVelocity(this.glueRecordVelocityX, -300);
+        this.platform.hasBallGlued = false;
       }
     }
   }
@@ -104,11 +83,11 @@ export class Game extends Phaser.Scene {
     this.platformImpactSample.play();
     this.increasePoints(1);
     let relativeImpact = ball.x - platform.x;
-    if(this.gluePower) {
+    if(this.platform.hasGluePower()) {
       this.ball.setVelocityY(0);
       this.ball.setVelocityX(0);
       this.glueRecordVelocityX = this.calculateVelocity(relativeImpact);
-      this.isGlued = true;
+      this.platform.hasBallGlued = true;
     } else {
         ball.setVelocityX(this.calculateVelocity(relativeImpact));
     }
@@ -131,7 +110,7 @@ export class Game extends Phaser.Scene {
     if (this.phaseConstructor.isPhaseFinished()) {
       this.phaseChangeSample.play();
       this.phaseConstructor.nextLevel();
-      this.setInitialPlatformState();
+      this.platform.setInitialState(this.ball);
     }
   }
 
@@ -152,19 +131,6 @@ export class Game extends Phaser.Scene {
       this.winSample.play();
       this.scene.start('congratulations');
     }
-  }
-
-  setInitialPlatformState() {
-    this.platform.x = 400;
-    this.platform.y = 460;
-    this.ball.setVelocity(0,0);
-    this.ball.x = 385;
-    if(this.platformSize == 1) {
-      this.ball.y = 420;
-    } else {
-      this.ball.y = 430;
-    }
-    this.ball.setData('glue', true);
   }
 
   createAnimations() {
@@ -194,20 +160,12 @@ export class Game extends Phaser.Scene {
   increaseLives() {
     this.liveCounter.increase();
   }
-
-  setPlatformSize(size) {
-    this.platformSize = size;
-    this.platform.setScale(size);
-  }
-  setPlatformBig() {
-    this.setPlatformSize(LARGE_PLATFORM_SIZE);
-    this.gluePower = false;
-  }
-  setPlatformInitial() {
-    this.setPlatformSize(INITIAL_PLATFORM_SIZE);
-  }
+  
   setGluePower() {
-    this.setPlatformInitial();
-    this.gluePower = true;
+    this.platform.setGluePower();
+  }
+  
+  setPlatformBig() {
+    this.platform.setBigSize();
   }
 }
