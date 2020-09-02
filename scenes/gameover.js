@@ -5,11 +5,6 @@ export class Gameover extends Phaser.Scene {
     super({ key: 'gameover' });
     this.restartButton = new RestartButton(this);
   }
-
-  preload() {
-    this.load.image('gameover', 'images/gameover.png');
-    this.restartButton.preload();
-  }
   
   create() {
     this.add.image(410, 250, 'background');
