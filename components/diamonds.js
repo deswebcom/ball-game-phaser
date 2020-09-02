@@ -2,11 +2,10 @@ export class Diamonds {
   constructor(scene) {
     this.relatedScene = scene;
     this.diamonds = this.relatedScene.physics.add.group();
-    this.relatedScene.physics.add.collider(this.relatedScene.ball, this.diamonds, this.ballImpact, null, this);
+    this.relatedScene.physics.add.collider(this.relatedScene.ball.get(), this.diamonds, this.ballImpact, null, this);
   }
   
   create(x, y, sprite, relatedPower) {
-    console.log(sprite);
     let diamond = this.diamonds.create(x, y, sprite)
     diamond.relatedPower = relatedPower;
     diamond.setScale(0.6);

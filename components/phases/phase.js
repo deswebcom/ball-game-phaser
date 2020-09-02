@@ -5,11 +5,11 @@ export class Phase {
   }
 
   configureColisions() {
-    this.relatedScene.physics.add.collider(this.relatedScene.ball, this.bricks, this.brickImpact, null, this);
+    this.relatedScene.physics.add.collider(this.relatedScene.ball.get(), this.bricks, this.brickImpact, null, this);
   }
 
   configureColisionsFixed() {
-    this.relatedScene.physics.add.collider(this.relatedScene.ball, this.fixedBricks, this.relatedScene.fixedBrickImpact, null, this.relatedScene);
+    this.relatedScene.physics.add.collider(this.relatedScene.ball.get(), this.fixedBricks, this.relatedScene.fixedBrickImpact, null, this.relatedScene);
   }
 
   deleteFixedBricks() {
@@ -30,7 +30,6 @@ export class Phase {
   }
 
   setBrickCollider(element) {
-    console.log('setbrickcollider en phase!!');
     this.relatedScene.physics.add.collider(this.bricks, element);
     if (this.fixedBricks) {
       this.relatedScene.physics.add.collider(this.fixedBricks, element);
@@ -48,9 +47,7 @@ export class Phase {
 
   brickImpact(ball, brick) {
     let brickIndex = this.getBrickIndex(brick);
-    console.log('el index es', brickIndex);
     if(this.powers[brickIndex]) {
-      console.log('tengo un poder en ', brickIndex);
       this.powers[brickIndex].create(ball.x, ball.y)
     }
     this.relatedScene.brickImpact(ball, brick);

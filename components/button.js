@@ -1,6 +1,5 @@
 export class Button {
   constructor(scene, image, x, y) {
-    console.log('button constructor');
     this.image = image;
     this.relatedScene = scene;
     this.x = x;
