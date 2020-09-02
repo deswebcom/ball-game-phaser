@@ -10,7 +10,7 @@ export class Game extends Phaser.Scene {
   init() {
     this.phaseConstructor = new PhaseConstructor(this);
     this.score = 0;
-    this.liveCounter = new LiveCounter(this, 3);
+    this.liveCounter = new LiveCounter(this, 4);
   }
 
   create() {
@@ -139,17 +139,24 @@ export class Game extends Phaser.Scene {
     this.ball.setData('glue', true);
   }
 
-  setBrickCollider(element) {
-    this.phaseConstructor.setBrickCollider(element);
-  }
-
   createAnimations() {
     this.anims.create({
       key: 'bluediamondanimation',
-      frames: this.anims.generateFrameNumbers('bluediamondsprites', { start: 0, end: 7 }),
+      frames: this.anims.generateFrameNumbers('bluediamond', { start: 0, end: 7 }),
       frameRate: 10,
       repeat: -1,
       yoyo: true,
     });
+    this.anims.create({
+      key: 'reddiamondanimation',
+      frames: this.anims.generateFrameNumbers('reddiamond', { start: 0, end: 7 }),
+      frameRate: 10,
+      repeat: -1,
+      yoyo: true,
+    });
+  }
+
+  increaseLives(num) {
+    this.liveCounter.increase(num);
   }
 }

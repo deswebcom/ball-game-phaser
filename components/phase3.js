@@ -1,9 +1,12 @@
 import { Phase } from './phase.js'
 import { LivePower } from './powers/live-power.js';
+import { PointsPower } from './powers/points-power.js';
+import { Diamonds } from "./diamonds.js";
 
 export class Phase3 extends Phase {
 
   create() {
+  
     this.bricks = this.relatedScene.physics.add.staticGroup();
 
     this.bricks.create(110, 270, 'orangebrick');
@@ -19,10 +22,13 @@ export class Phase3 extends Phase {
     this.bricks.create(440, 90, 'greenbrick');
 
     this.configureColisions();
-    
-    this.powers[3] = new LivePower(this.relatedScene);
-    this.powers[4] = new LivePower(this.relatedScene);;
-    this.powers[5] = new LivePower(this.relatedScene);;
+  
+    this.diamonds = new Diamonds(this.relatedScene);
+    this.setBrickCollider(this.diamonds.diamonds);
+
+    this.powers[3] = new LivePower(this.relatedScene, this.diamonds);
+    this.powers[4] = new PointsPower(this.relatedScene, this.diamonds);
+    this.powers[5] = new PointsPower(this.relatedScene, this.diamonds);
 
   }
 }

@@ -16,7 +16,12 @@ export class Phase {
     if(this.fixedBricks) {
       this.fixedBricks.getChildren().forEach(item => {
         item.disableBody(true, true);
-      })
+      });
+    }
+    if(this.diamonds) {
+      this.diamonds.diamonds.getChildren().forEach(item => {
+        item.disableBody(true, true);
+      });
     }
   }
 

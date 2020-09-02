@@ -1,7 +1,11 @@
 import { Power } from './power.js';
 
 export class LivePower extends Power {
-  constructor(scene) {
-    super(scene, 'bluediamondsprites');
+  constructor(scene, diamonds) {
+    super(scene, diamonds, 'bluediamond');
+  }
+
+  givePower() {
+    this.relatedScene.increaseLives(1);
   }
 }

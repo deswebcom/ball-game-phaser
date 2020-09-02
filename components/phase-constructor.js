@@ -36,8 +36,4 @@ export class PhaseConstructor {
   isPhaseFinished() {
     return this.currentPhase.isPhaseFinished();
   }
-
-  setBrickCollider(element) {
-    this.currentPhase.setBrickCollider(element)
-  }
 }

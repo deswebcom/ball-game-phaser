@@ -24,9 +24,12 @@ export class Loader extends Phaser.Scene {
     this.load.image('whitebrick', 'images/brickWhite.png');
     this.load.image('greybrick', 'images/brickGrey.png');
     
-    //this.load.image('bluediamond', 'images/blue_diamond.png');
-    this.load.spritesheet('bluediamondsprites',
+    this.load.spritesheet('bluediamond',
       'images/blue_diamond-sprites.png',
+      { frameWidth: 48, frameHeight: 48 }
+    );
+    this.load.spritesheet('reddiamond',
+      'images/red_diamond-sprites.png',
       { frameWidth: 48, frameHeight: 48 }
     );
     
