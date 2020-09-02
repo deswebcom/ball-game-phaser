@@ -21,7 +21,7 @@ export class Diamonds {
     diamond.destroy();
     diamond.relatedPower.givePower();
     let currentVelocity = ball.body.velocity;
-    ball.setData('glue', false);
+    this.relatedScene.removeGlueFromBall();
     if(currentVelocity.y > 0) {
       ball.body.setVelocityY(300);
     } else {

@@ -31,7 +31,7 @@ export class Game extends Phaser.Scene {
     this.platform.create();
     this.ball.create();
     
-    this.physics.add.collider(this.ball.ball, this.platform.get(), this.platformImpact, null, this);
+    this.physics.add.collider(this.ball.get(), this.platform.get(), this.platformImpact, null, this);
     
     this.phaseConstructor.create();
 
@@ -167,5 +167,9 @@ export class Game extends Phaser.Scene {
   
   setPlatformBig() {
     this.platform.setBigSize();
+  }
+
+  removeGlueFromBall() {
+    this.ball.removeGlue();
   }
 }

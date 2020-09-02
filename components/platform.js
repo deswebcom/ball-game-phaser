@@ -4,8 +4,7 @@ export const LARGE_PLATFORM_SIZE = 1;
 export class Platform {
   constructor(scene) {
     this.relatedScene = scene;
-    //this.size = INITIAL_PLATFORM_SIZE;
-    this.size = 1;
+    this.size = INITIAL_PLATFORM_SIZE;
     this.gluePower = false;
     this.hasBallGlued = false;
   }

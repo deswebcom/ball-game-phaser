@@ -24,4 +24,7 @@ export class Ball {
     this.isGlued = false;
   }
 
+  removeGlue() {
+    this.isGlued = false;
+  }
 }
