@@ -8,9 +8,9 @@ export class MobileControls {
   }
 
   create() {
-    this.leftButton = this.relatedScene.add.image(60, 320, 'leftbutton').setInteractive();
-    this.rightButton = this.relatedScene.add.image(740, 320, 'rightbutton').setInteractive();
-    this.launchButton = this.relatedScene.add.image(726, 430, 'launchbutton').setInteractive();
+    this.leftButton = this.relatedScene.add.image(80, 320, 'leftbutton').setInteractive();
+    this.rightButton = this.relatedScene.add.image(720, 320, 'rightbutton').setInteractive();
+    this.launchButton = this.relatedScene.add.image(706, 430, 'launchbutton').setInteractive();
 
     this.leftButton.on('pointerdown', () => {
       this.left.isDown = true;
