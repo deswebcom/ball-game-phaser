@@ -7,6 +7,9 @@ export class Loader extends Phaser.Scene {
   }
 
   preload() {
+    let url = 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexvirtualjoystickplugin.min.js';
+    this.load.plugin('rexvirtualjoystickplugin', url, true);
+
     // Preload
     this.load.image('background-preload', 'images/background-preload.png');
     this.load.spritesheet('playbutton', 'images/playbutton.png', { frameWidth: 190, frameHeight: 49 });

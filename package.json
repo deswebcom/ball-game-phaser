@@ -1,0 +1,23 @@
+{
+  "name": "phaser3-breakout",
+  "version": "0.0.1",
+  "description": "Breakout game developed with Phaser 3",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deswebcom/ball-game-phaser.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "@midesweb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deswebcom/ball-game-phaser/issues"
+  },
+  "homepage": "https://github.com/deswebcom/ball-game-phaser#readme",
+  "dependencies": {}
+}

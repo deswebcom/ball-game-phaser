@@ -19,14 +19,14 @@ export class Platform {
     return this.gluePower;
   }
   
-  updatePosition(ball, cursors) {
-    if (cursors.left.isDown) {
+  updatePosition(ball, cursors, joystick) {
+    if (cursors.left.isDown || joystick.left.isDown) {
       this.platform.setVelocityX(-500);
       if (ball.isGlued || this.hasBallGlued) {
         ball.get().setVelocityX(-500);
       }
     }
-    else if (cursors.right.isDown) {
+    else if (cursors.right.isDown || joystick.right.isDown) {
       this.platform.setVelocityX(500);
       if (ball.isGlued || this.hasBallGlued) {
         ball.get().setVelocityX(500);
