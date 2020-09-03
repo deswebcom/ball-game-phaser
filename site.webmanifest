@@ -11,10 +11,17 @@
             "src": "/android-chrome-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
+        },
+        {
+            "purpose": "maskable",
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
         }
     ],
     "theme_color": "#5E406A",
     "background_color": "#243A3E",
     "display": "fullscreen",
-    "orientation": "landscape"
+    "orientation": "landscape",
+    "start_url": "/index.html"
 }
