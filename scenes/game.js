@@ -3,7 +3,7 @@ import { LiveCounter } from '../components/live-counter.js';
 import { Platform } from '../components/platform.js';
 import { Ball } from '../components/ball.js';
 
-const INITIAL_LIVES = 3;
+const INITIAL_LIVES = 6;
 const INITIAL_VELOCITY_X = -60;
 
 export class Game extends Phaser.Scene {
