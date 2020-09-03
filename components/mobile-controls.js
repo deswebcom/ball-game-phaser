@@ -14,6 +14,8 @@ export class MobileControls {
 
     this.leftButton.on('pointerdown', () => {
       this.left.isDown = true;
+      this.right.isDown = false;
+      this.launch.isDown = false;
     });
     this.leftButton.on('pointerup', () => {
       this.left.isDown = false;
@@ -21,6 +23,8 @@ export class MobileControls {
 
     this.rightButton.on('pointerdown', () => {
       this.right.isDown = true;
+      this.left.isDown = false;
+      this.launch.isDown = false;
     });
     this.rightButton.on('pointerup', () => {
       this.right.isDown = false;
@@ -28,6 +32,8 @@ export class MobileControls {
 
     this.launchButton.on('pointerdown', () => {
       this.launch.isDown = true;
+      this.right.isDown = false;
+      this.left.isDown = false;
     });
     this.launchButton.on('pointerup', () => {
       this.launch.isDown = false;
