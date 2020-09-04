@@ -8,9 +8,9 @@ export class MobileControls {
   }
 
   create() {
-    this.leftButton = this.relatedScene.add.image(80, 320, 'leftbutton').setInteractive();
-    this.rightButton = this.relatedScene.add.image(720, 320, 'rightbutton').setInteractive();
-    this.launchButton = this.relatedScene.add.image(706, 430, 'launchbutton').setInteractive();
+    this.leftButton = this.relatedScene.add.image(60, 320, 'leftbutton').setScale(1.3).setInteractive({ draggable: true });
+    this.rightButton = this.relatedScene.add.image(740, 320, 'rightbutton').setScale(1.3).setInteractive({ draggable: true });
+    this.launchButton = this.relatedScene.add.image(722, 430, 'launchbutton').setScale(1.3).setInteractive();
 
     this.leftButton.on('pointerdown', () => {
       this.left.isDown = true;
@@ -20,6 +20,9 @@ export class MobileControls {
     this.leftButton.on('pointerup', () => {
       this.left.isDown = false;
     });
+    this.leftButton.on('dragend', () => {
+      this.left.isDown = false;
+    });
 
     this.rightButton.on('pointerdown', () => {
       this.right.isDown = true;
@@ -27,6 +30,9 @@ export class MobileControls {
       this.launch.isDown = false;
     });
     this.rightButton.on('pointerup', () => {
+      this.right.isDown = false;
+    });
+    this.rightButton.on('dragend', () => {
       this.right.isDown = false;
     });
 
