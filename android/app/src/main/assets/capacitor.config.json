@@ -1,0 +1,13 @@
+{
+  "appId": "com.desarrolloweb.breakout",
+  "appName": "phaser3-breakout",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

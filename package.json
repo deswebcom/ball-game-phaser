@@ -22,6 +22,10 @@
   },
   "homepage": "https://github.com/deswebcom/ball-game-phaser#readme",
   "dependencies": {
+    "@capacitor/android": "^2.4.1",
+    "@capacitor/cli": "^2.4.1",
+    "@capacitor/core": "^2.4.1",
+    "@capacitor/ios": "^2.4.1",
     "phaser": "^3.24.1"
   },
   "devDependencies": {
