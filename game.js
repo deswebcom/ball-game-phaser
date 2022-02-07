@@ -58,7 +58,7 @@ export class Game extends Phaser.Scene {
 
     this.physics.add.collider(this.ball, this.bricks, this.brickImpact, null, this);
 
-    this.scoreText = this.add.text(16, 16, 'PUNTOS: 0', { fontSize: '20px', fill: '#fff', fontFamily: 'verdana, arial, sans-serif' });
+    this.scoreText = this.add.text(16, 16, 'PUNTOS: 10000', { fontSize: '20px', fill: '#fff', fontFamily: 'verdana, arial, sans-serif' });
   }
 
   update() {

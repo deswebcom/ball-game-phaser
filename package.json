@@ -1,0 +1,23 @@
+{
+  "name": "ball-game-phaser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "web-dev-server --node-resolve --watch --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deswebcom/ball-game-phaser.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deswebcom/ball-game-phaser/issues"
+  },
+  "homepage": "https://github.com/deswebcom/ball-game-phaser#readme",
+  "devDependencies": {
+    "@web/dev-server": "^0.1.29"
+  }
+}
